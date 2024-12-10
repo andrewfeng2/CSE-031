@@ -1,0 +1,64 @@
+Activity #2:
+    7.  addi $s0, $zero, -15 # Load immediate value -15 into register $s0 ($16)
+                             # This is an I-format instruction that adds -15 to $zero
+        addi $rt, $rs, -15
+        op: 0x08 = 001000    #opcode for addi
+        rs: 0x00 = 00000     #Source register ($zero=0)
+        rt: 0x10 = 10000     #target refgister ($s0=16)
+        Immediate: 2s comp(0xf) = 1111 1111 1111 0001  # -15 in 2's complement
+        Binary: 0010 0000 0001 0000 1111 1111 1111 0001
+        Hex: 0x2010fff1
+        Convert back to Bin: 0010 0000 0001 0000 1111 1111 1111 0001
+        Seperate based on which format it's in (I format):
+        001000 00000 10000 1111111111110001
+          op    rs     rt      immediate
+        0x8    $0    $16         -15
+        addi $16, $0, -15
+        addi $s0, $zero, -15
+
+    14. slt $t0, $s0,           $s1# Set Less Than: if $s0 < $s1, set $t0 to 1; else set to 0
+                                # This is an R-format instruction
+        slt $rd, $rs, $rt, shamt, funct
+        op: 0x0 = 000000    # Opcode (R format)
+        rs: 0x10 = 10000    # First source register ($s0 = 16)
+        rt: 0x11 = 10001    # Second source register ($s1 = 17)
+        rd: 0x08 = 01000    # Destination register ($t0 = 8)
+        shamt: 0x00 (doesn't shift)
+        funct: 0x2a
+        Binary: 000000 10000 10001 01000 00000 101011
+        Hex: 0x0211402a
+        Convert back to Bin: 000000 10000 10001 01000 00000 101011
+                               op     rs    rt    rd  shamt funct
+                               0x0  0x10  0x11  0x08  0x0   0x2a
+        slt $8, $16, $17
+        slt $t0, $s0, $s1
+
+    17. beq $t0, $zero, LEEQ    # Branch if Equal: if $t0 equals $zero, branch to LEEQ
+                                # This is an I-format instruction
+        beq $rs, $rt, Immediate
+        op: 0x4 = 000100         # Opcode for beq
+        rs: 0x8 = 01000          # First source register ($t0 = 8)
+        rt: 0x0 = 00000          # Second source register ($zero = 0)
+        Immediate: 0x6 = 0000 0000 0000 0110  #Branch offset
+        Binary: 0001 0000 1000 0000 0000 0000 0000 0110
+        Hex: 0x10800006
+        Convert back to Bin: 000100 01000 00000 0000000000000110
+                               op     rs    rt     Immediate
+                               0x4   0x8   0x0        0x6
+        beq $8, $0, ([current address + 1] + 6)
+        beq $t0, $zero, LEEQ
+
+    20. j GRT       # Jump to label GRT
+                    # This is a J-format instruction
+        j Immediate
+        op: 0x2     # Opcode for jump
+        Immediate: 0x0040001c  # Jump target address
+        Binary: 0000 1000 0001 0000 0000 0000 0000 0111
+        Hex: 0x08100007
+        Convert back to Bin: 000010 0000 0100 0000 0000 0000 0001 11
+                               op           Immediate
+        Take immediate value and adjust it to be a proper address:
+        Before: 0000 0100 0000 0000 0000 0001 11
+        After: 0000 0000 0100 0000 0000 0000 0001 1100
+        Label at that address: GRT
+        j GRT
