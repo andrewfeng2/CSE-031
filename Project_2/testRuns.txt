@@ -1,0 +1,53 @@
+Test Case 1: Normal case with no drops
+Enter the number of assignments (between 1 and 25): 5
+Enter score: 90
+Enter score: 85
+Enter score: 95
+Enter score: 88
+Enter score: 92
+Original scores: 90 85 95 88 92 
+Sorted scores (in descending order): 95 92 90 88 85 
+Enter the number of (lowest) scores to drop: 0
+Average (rounded down) with dropped scores removed: 90
+
+Test Case 2: Drop lowest 2 scores
+Enter the number of assignments (between 1 and 25): 6
+Enter score: 75
+Enter score: 82
+Enter score: 68
+Enter score: 95
+Enter score: 60
+Enter score: 88
+Original scores: 75 82 68 95 60 88 
+Sorted scores (in descending order): 95 88 82 75 68 60 
+Enter the number of (lowest) scores to drop: 2
+Average (rounded down) with dropped scores removed: 85
+
+Test Case 3: Invalid number of assignments
+Enter the number of assignments (between 1 and 25): 30
+Error: Number of assignments must be between 1 and 25
+
+Test Case 4: Invalid assignments negative
+Enter the number of assignments (between 1 and 25): 5
+Enter score: 1
+Enter score: -1
+Error: Scores must be greater than 0
+
+Test Case 5: Drop all scores (division by zero case)
+Enter the number of assignments (between 1 and 25): 4
+Enter score: 85
+Enter score: 90
+Enter score: 95
+Enter score: 88
+Original scores: 85 90 95 88 
+Sorted scores (in descending order): 95 90 88 85 
+Enter the number of (lowest) scores to drop: 4
+Average (rounded down) with dropped scores removed: 0
+
+Test Case 6: Single score
+Enter the number of assignments (between 1 and 25): 1
+Enter score: 88
+Original scores: 88 
+Sorted scores (in descending order): 88 
+Enter the number of (lowest) scores to drop: 0
+Average (rounded down) with dropped scores removed: 88 
