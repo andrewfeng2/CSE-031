@@ -1,0 +1,95 @@
+Partners: Cameron Nguyen 
+TPS 1:
+1. Before we use a new tool, we will need to find out how to use it. MARS DOES NOT mean that MIPS
+is an alien language (well, sort of). Work with your partner and find out what MARS stands for.
+
+MARS stands for MIPS Assembler and Runtime Simulator.
+
+2. Since you have found out what MARS stands for, you probably have found out the webpage of MARS
+as well. Visit the download page and download MARS in your computer. 
+
+To run MARS, just double-
+click the downloaded jar file. You will need Java to run it. Note: MARS is not pre-installed in the lab
+computers, so you need to download it if you are using a lab computer. But before running the jar file
+you will have to mark the file as user-executable. To do this, navigate to the folder where you have
+downloaded the jar file and run the command chmod u+x Mars4_5.jar. After this, you may
+double-click the jar file to run it.
+
+
+
+3. From the Tutorial materials page (you can find the link to it from the home page), save both tutorial
+materials (MARS feature map and MARS tutorial) as well as Fibonacci.asm
+
+4. Download and save myFirstExample.s from the assignment page in your Lab_5 folder (both .asm
+and .s file extensions are equivalent).
+
+5. Follow Part 1 : Basic MARS Use in the tutorial using Fibonacci.asm and discuss the following
+questions:
+
+a. How do you load an assembly file?
+You first open Mars, click on "File"  in the menu bar and select open and then you can open your specified
+file. 
+
+b. How do you assemble (compile) the program?
+You click on the "Assemble" button in the toolbar it looks like a wrench. 
+
+c. How do you run the assembled program?
+You click on the "Run" button in the toolbar it looks like a green play button.
+Alternatively you can go to "Run" in the menu bar and select "Go". 
+
+d. Can you run a program before assembling it?
+No you cannot run a program before assembling it as the assembly code needs to be translated into machine code 
+before it can be executed. If you try running the prgorm without assmbling it first, MARS will prompt you to 
+assemble it. 
+
+e. If you want to run the assembled program line by line, how to do it?
+You first assmeble the program, then you click on the "Step" button which will execute one instruciton. 
+You can also use F7 as a keyboard shortcut for stepping. 
+
+f. How do you run the program again after it has finished running?
+You click on the "Reset" button in the toolbar it looks like a rewind symbol.
+
+
+6. Now load, understand, discuss, and run myFirstExample.s
+
+
+TPS 2:
+Individual assignment 1:
+1. What do the .data, .word, .text directives mean (i.e., what do you put in each section)?
+.data indicates the start of the data section where you declare and initialize variables.
+.word is used within the datas seciton to declare and intitalize a 32 bit integer value.
+.text marks the beginning of the code section where you write the actual assembly instrucitons. 
+
+2. What does line 10 do?
+Line 10 acts as a loop termination condition, determingin when the Fibonacci calculation is 
+complete. When $t3 reaches 0, it means we've calculated the desired Fibonacci number, so we branch to the finish label to end the calculation and print the result.
+If $t3 is not equal to zero, the program continues to the next instruction, which calculates the next Fibonacci number in the sequence.
+
+3. What does line 15 do?
+Line 15 is a  j fib instruction which makes the code repeat until the desired Fibonacci number is calculated. Without it, the program would just calculate one 
+step f the Fibonacci sequence and then continue to the finish label.
+
+4. How do you set a breakpoint in MARS? Set breakpoint on line 15 and list the steps of achieving this.
+You first locate line 15 in the editor in the execute sidebar and click on the box next to line 15 which 
+corresponds to the breakpoint. 
+
+5. After your program stops because of a breakpoint, how do you continue to execute your code? How do
+you step through your code?
+You click on the run button or press f5 to resume normal exectution. You step through by pressing the step button 
+or F7, or you can use the step back button or press F8 to step back. 
+
+6. How can you find out the content of a register? How do you modify the value of a register manually
+while running the program?
+You look at the "registers" pane in MARS which displays all register values. If you want to modify the 
+value manually, you locate the name of the value you want ot change and go to the very last row and column which 
+coreponds to the name and modify it.
+
+7. At what address is n stored in memory? Calculate the 13th fib number by modifying this memory
+location.
+The address is 0x10010000 or the first item in the data segment. The program is already has the fib number as 
+13, if you would want to chang it you would simply change the .word to .word "any number". 
+
+8. Line 19 and 21 use the syscall instruction. What is it and how do you use it?
+It is insturuction is used to request system services. In MIPS you set up the service number in $v0 and any arguments 
+in other registers, then call syscall. Line 19: li $v0, 1 sets up syscall 1, which prints an integer. The integer to print should be in $a0.
+Line 21: li $v0, 10 sets up syscall 10, which terminates the program. 
