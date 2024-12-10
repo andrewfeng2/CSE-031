@@ -1,0 +1,168 @@
+TPS 1:
+
+1. Load fib.s in MARS and study the code. This is the same program we worked on during Lab 06.
+
+2. Recall that fib.s calculates the 13th Fibonacci number (n = 13). Now let us make this program more
+generic so it will calculate the nth Fibonacci number, where n can be any number from a user input.
+
+3. From Lab 06, we have learned how to print out statements in MIPS. Insert instructions in fib.s so
+that the program will print out “Please enter a number: ” at the beginning of the program to
+prompt user for input.
+
+        .data
+prompt: .asciiz "Please enter a number: "    # Add prompt message
+
+
+4. In the program, $t3 was used to store the value of n. Now, let us read in a user input and save that
+value into $t3. Do a search in the MARS documentations to find out how to use syscall to read an
+INTEGER from a user. Again, you must store the value into $t3.
+
+     # Read integer input
+        li      $v0, 5                       # syscall code for read integer
+        syscall                              # read integer (result stored in $v0)
+        move    $t3, $v0         
+
+5. Since the program now reads a number from a user, do we need to declare n in the .data segment of
+the program? How about the la and lw instructions regarding n? Comment out those instructions so
+they will not mess up your program.
+
+main:
+        # Comment out these instructions:
+        # la      $t3, n                     # No longer need to load address of n
+        # lw      $t3, 0($t3)   
+
+No, we no longer need to declare n in the .data semgent nor do you need the la or lw instructions.
+
+6. Assemble the program and test it with different numbers to see if it runs correctly (you may use the
+original fib.s to verify your results.)
+
+TPS 2:
+
+1. Study recursion.c and trace the program. Without running the program, what will be the output if 5
+is entered? Compile and run recursion.c in a terminal (or any IDE) and verify your answer.
+
+The output will be: 
+Returning 1
+Returning 3
+Returning 3
+Returning 1
+Returning 3
+Returning 3
+Returning 1
+Returning 3
+Returning 1
+Returning 3
+Returning 3
+Returning 1
+Returning 3
+29
+
+2. Load recursion.s in MARS. This is the MIPS version of recursion.c. Do not assemble and run
+this program – the program is incomplete. Study the main function and discuss with your partner(s)
+about what it does (compare it with the C version). A lot of instructions are missing, and we will fill
+them out in the following steps.
+
+It is missing user prompt  along with the recusrive funciton with base case -1 and 0. 
+
+3. Since the recursion.c prompts to a user for input, insert instructions in recursion.s so the
+program will prompt the same statement to a user.
+
+prompt: .asciiz "Enter a number: "    # Input prompt string
+
+4. Insert statements for the program to read in a value from a user. What register should we use to store
+that value? (Hint: you will use it as the argument for your recursion function call.)
+
+ # Read user input
+        li $v0, 5          # syscall 5 reads an integer
+        syscall
+        move $a0, $v0      # Move input to $a0 for argument
+
+5. Next, the main function calls recursion with the correct input argument. After returning from
+recursion, we need to print out the returned value. What register do we expect the returned value to
+be stored in? However, the syscall for printing out a value is also using the same register. What can
+we do?
+
+It will be stored in register $v0. We can first move returned value from $v0 to $a0 to preserve it. 
+Then we can load sycall code into $v0 and execute. 
+
+move $a0, $v0      # Save return value to $a0 before it's overwritten
+li $v0, 1          # Load syscall code for print integer
+syscall            # Print the value
+
+6. Based on your answer from step 5, insert the correct instructions to print out the returned value before
+jumping to the end of program.
+
+move $a0, $v0      # Save return value to $a0 before it's overwritten
+li $v0, 1          # Load syscall code for print integer
+syscall            # Print the value
+
+7. Now, let us complete the recursion function. The stack pointer was moved to create extra storage
+for the function. How many integer values are reserved in this storage? What is the first thing to be
+stored in this stack frame? Insert a statement to accomplish this.
+
+The stack pointer is decremented by 12 bytes, has space for 3 integer values. 
+The first thing stored is the return address ($ra) This is done with instruction 
+sw $ra,0($sp)
+recursion:
+	# Setup stack frame
+	addi	$sp, $sp, -12		# make room for 3 items
+	sw	$ra, 0($sp)			# save return address
+	sw	$a0, 4($sp)			# save argument
+	sw	$s0, 8($sp)			# save $s0
+
+8. Based on the branch statement under label recursion, update the returning value. Again, you must
+use the correct register to store the returning value.
+
+minus_one:
+    li  $v0, 1              # return 1 when input is -1
+
+9. Based on the branch statement under label not_minus_one, update the returning value. Again, you
+must use the correct register to store the returning value.
+
+zero:
+    li  $v0, 3              # return 3 when input is 0
+
+10. When the input argument is not 0 or -1, the program will call recursion 2 times. This happens in the
+code under label not_zero. Why do we need to save $a0 into the stack?
+
+    sw  $a0, 4($sp)         # save argument
+
+We modify $a0 because for the first recursive call(n-1) 
+We need the original value of n later to calculate (n-2) for 
+the second recusive call. 
+
+11. Insert a statement to update the input argument for the next recursion call.
+
+    addi    $a0, $a0, -1    # n-1
+
+
+12. After returning from the last recursion, the program is about to call the next recursion. However,
+the last recursion came back with a returned value. What will happen to if we call recursion right
+away? Insert statements to prevent this from happening.
+
+We save the return value in $s0 because the second recursive call would overwrite $v0.
+    # Save result of first call
+    move    $s0, $v0        # Save first recursion result in $s0
+
+13. Now the program is ready to call recursion again. Insert statements to update the next input
+argument.
+
+    lw  $a0, 4($sp)         # restore original n
+    addi    $a0, $a0, -2    # n-2
+
+14. After returning from the second recursion call, insert statements to update the final value to be
+returned to main.
+
+    # Calculate final result
+    add $v0, $s0, $v0       # add results of both calls
+
+15. Before returning to main, a value needs to be retrieved so the program can return to the correct
+location of the code. What is this value? Insert a statement under the label end_recur to retrieve this
+value
+
+    lw  $ra, 0($sp)         # restore return address
+
+We need to restore the return address ($ra) that was saved at the beginning of the funciton. Tells the program 
+where to return to after the funciton completes. 
+
+Individual Assignment 1:

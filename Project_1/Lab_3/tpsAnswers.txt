@@ -1,0 +1,110 @@
+Names: Andrew Feng, Cameron Nguyen, Paul Choi 
+TPS 1:
+1. Name the 3 pools for memory and what kind of variables will be stored in each pool.
+The three pools for memory are the Static/Global Memory pool which stores global and static variables which have a fixed location in 
+memory, Stack Memory Pool which stores local varaibles and function call information and Heap Memory which stores dynamically allocated
+memory and variables.
+
+2. Open mem.c with your favorite text editor and discuss the following questions with your partner:
+a. How many variables are declared?
+Three variables are declared: num, ptr, and handle.
+
+b. How many of them are pointers? What type of data does each pointer point to?
+Two of them are pointers, ptr is a pointer to an int, handle is also a pointer to an int. 
+
+c. Which pool of memory are these variables stored in?
+These variables are stored in the stack because they are local.
+
+d. Which pool of memory will the pointer ptr point to in line 12.
+The pointer ptr will point to memory in the heap in line 12. 
+
+3. Using a piece of paper (or a drawing app), draw the 3 pools of memory and indicate the locations (in
+which pool?) of the variables in mem.c using boxes (like what we did in lecture). Label the boxes with
+variable names, their content, and their addresses. You will need to insert extra code to obtain the
+addresses of these variables.
+
+4. In the same drawing, use arrows to connect each pointer to its destination
+
+
+TPS 2:
+1. Open NodeStruct.c and discuss what this program does.
+It's a simple linked list strcutre that  intitalizes the first node of the list.
+The program defines a node structure with an integer a float and a pointer to another node. The main function
+dynamically allocates memory for a Node strcture, assgins values to its members, and pirnts out the values and addresses
+of the node members. It is a node struct that allocates memory with the malloc funciton. 
+
+2. Insert extra code to print out the value of head, addresses of head, iValue, fValue, and next pointed
+by head.
+
+3. Based on the addresses of the members of Node structure, what do you observe about how structures
+are stored in memory? What is the relationship between the pointer (head) and its destination (the
+Node structure)? 
+The structres are stored in contigious memory blocks, with each member occupying its required space. 
+The pointer head contains the address of the beginning of the allocated memory for the structure, which is also the address of its first member. 
+The subsequent members are stored at higher addresses within the allocated block. 
+
+
+
+Individual Assignment 1: Arrays and pointers
+
+As we have discussed in lecture, we can use array names as if they are pointers. Open array.c and
+complete the following tasks:
+
+a. Why do we need to pass the size of array to the function?
+
+We do this because Arrays decay to pointers in C, losing size information, also, it's needed for memory allocation and loop boundaries. 
+Prevents memory overflow. It also allows the function to work with various array sizes.
+
+b. Is the original array (the one being passed into the function) changed at the end of this function?
+
+No, the original array is not changed. The function creates and sorts a new array.
+
+c. Why do you think a new array (s_array) is needed to store the result of the sorted values (why not
+update the array as we sort)? Hint: look at what the main function does
+
+The new array s_arr is used to store the sorted values to preserve the original array arr.
+
+Avoids side effects on the input as it preserves original data and allows the soting algorithm to be non 
+destructive, meaning it doesn't modify the input data. It also allows you to display both unsorted and sorted arrays in main().
+Provides more flexibility and functionality in the main program, allowing it to work with both the original 
+and sorted data as needed.
+
+
+
+Individual Assignment 2: Cyclic Linked List
+In cyclic_ll.c, complete the function has_cycle() to implement the following algorithm for
+checking if a singly-linked list has a cycle.
+Recall that if p is a pointer to a struct, p->member refers to a member variable in the struct, and is
+equivalent to (*p).member.
+
+1) Start with two pointers at the head of the list
+	node *slow = head;  //moves one step at a time
+	node *fast = head->next;   //moves two steps at a time
+
+
+2) On each iteration, increment the first pointer by one node and the second pointer by two nodes. If it is
+not possible to do one or both because of a null pointer, then we know there is an end to the list and
+there is therefore no cycle.
+
+while (fast != NULL && fast->next != NULL)
+Loops until fast reaches end of list 
+
+3) We know there is a cycle if
+a. The second pointer is the same as the first pointer
+b. The next node of the second pointer is pointed to by the first pointer
+The reason we know there is a cycle with the two conditions in 3) is that second pointer has wrapped
+around to the first one in the circle and we have detected it. After you have correctly implemented
+has_cycle, the program you get when you compile cyclic_ll.c will tell you that has_cycle agrees
+with what the program expected it to output
+
+if (slow == fast) {  // a. The second pointer is the same as the first pointer
+			return 1;  // Cycle detected
+		}
+		if (slow == fast->next) {  // b. The next node of the second pointer is pointed to by the first pointer
+			return 1;  // Cycle detected
+		}
+		slow = slow->next;  //Moves slow pointer one step
+		fast = fast->next->next; //Moves fast pointer two steps
+
+
+

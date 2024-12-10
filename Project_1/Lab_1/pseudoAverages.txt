@@ -1,0 +1,17 @@
+FUNCTION sum_of_digits(number):
+    SET sum = 0
+    SET number = absolute value of number
+    WHILE number > 0:
+        SET sum = sum + (number mod 10)
+        SET number = number / 10
+    RETURN sum
+
+FUNCTION get_ordinal_suffix(n):
+    IF n mod 100 is between 11 and 13:
+        RETURN "th"
+    ELSE:
+        SWITCH n mod 10:
+            CASE 1: RETURN "st"
+            CASE 2: RETURN "nd"
+            CASE 3: RETURN "rd"
+            DEFAULT: RETURN "th"
